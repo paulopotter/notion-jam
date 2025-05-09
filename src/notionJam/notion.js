@@ -15,6 +15,8 @@ export class NotionModule {
       caseType: 'snake',
     }, options);
 
+    this.options.should_ignore_filters = options.should_ignore_filters || false;
+
     this.options.filterValues = Array.isArray(this.options.filterValues) ? this.options.filterValues : this.options.filterValues.split(',').map(value => value.trim());
 
     const databaseId = getDatabaseId(database);
@@ -79,15 +81,21 @@ export class NotionModule {
   }
 
   async _fetchPagesFromDb(database_id) {
-    const response = await this.notion.databases.query({
-      database_id: database_id,
-      filter: {
+    let filter;
+    if(!this.options.should_ignore_filters){
+      filter = {
         or: [
           ...this.options.filterValues.map(value => ({
             property: this.options.filterProp, [this.options.filterType]: { equals: value }
           })),
         ]
-      }
+      };
+
+    }
+
+    const response = await this.notion.databases.query({
+      database_id: database_id,
+      filter: filter
     });
     // TODO: paginate more than 100 pages
     return response.results;
@@ -109,6 +117,11 @@ export class NotionModule {
         }
       }
     });
+  }
+
+  async getDatabase(database_id) {
+    const response = await this.notion.databases.retrieve({ database_id: database_id });
+    return response;
   }
 }
 

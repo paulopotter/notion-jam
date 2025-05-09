@@ -19,6 +19,7 @@ async function main() {
       downloadImageTimeout: process.env.DOWNLOAD_IMAGE_TIMEOUT,
       skipDownloadedImages: process.env.SKIP_DOWNLOADED_IMAGES,
       downloadFrontmatterImages: process.env.DOWNLOAD_FRONTMATTER_IMAGES,
+      should_ignore_filters: Boolean(process.env.SHOULD_IGNORE_FILTERS),
     });
   } catch (error) {
     console.error(error);

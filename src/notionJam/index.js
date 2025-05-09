@@ -28,6 +28,8 @@ export default async function run(options) {
     skipDownloadedImages: true,
     articlePath: 'posts/{title}/index.md',
     assetsPath: '.', // relative to the markdown file if starts with '.', or absolute otherwise
+
+    should_ignore_filters: false,
   }, options);
 
   options.parallelPages = toInt(options.parallelPages);
